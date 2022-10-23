@@ -1,1 +1,1 @@
-# SELECTIVE UNDER-SAMPLING METHOD SUS FOR IMBALANCED REGRESSION
+# Selective Under-Sampling method SUS for imbalanced regression
