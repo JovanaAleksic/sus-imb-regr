@@ -14,7 +14,7 @@ SUS is a novel pre-processing method designed to address challenges in imbalance
 - Support for high-dimensional data
 - Compatible with neural network models
 
-## Installation
+## Requirements
 
 ```bash
 pip install -r requirements.txt
@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Reading in the data
+### Reading in Data
 
 ```python
 import pandas as pd
