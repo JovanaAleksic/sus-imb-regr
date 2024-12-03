@@ -1,3 +1,4 @@
+# Implemented by https://github.com/nickkunz/smogn/
 import numpy as np
 import bisect as bs
     
