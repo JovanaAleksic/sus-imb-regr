@@ -25,6 +25,17 @@ pip install -r requirements.txt
 ### Basic Usage with SUS
 
 ```python
+import pandas as pd
+
+# Read data
+df = pd.read_csv('dataset.csv')
+
+# Separate features and target
+X = df.drop('target_column', axis=1).values  # Features (must be numeric, encode otherwise)
+y = df['target_column'].values               # Target values
+```
+
+```python
 from sus import SUS
 
 # Initialize SUS with parameters
@@ -41,18 +52,12 @@ X_resampled, y_resampled = sus.fit_resample(X, y)
 ### Using SUSiter
 
 ```python
-from sus import SUSiter
+susiter = SUSiter(k=7, blobtr=0.75, spreadtr=0.5, replacement_ratio=0.3)
+susiter.fit(X, y)
 
-# Initialize SUSiter
-susiter = SUSiter(
-    k=7,
-    blobtr=0.75,
-    spreadtr=0.5
-)
-
-# For each epoch/iteration in your training loop
+# Training loop
 for epoch in range(num_epochs):
-    X_iter, y_iter = susiter.get_iteration_sample(X, y)
+    X_iter, y_iter = susiter.get_iteration_sample()
     model.train(X_iter, y_iter)
 ```
 
