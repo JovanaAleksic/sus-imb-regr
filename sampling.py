@@ -80,7 +80,7 @@ class SMOGN(BaseSampler):
 
 ##########################################################################################
 
-class SUS(BaseSampler):
+class SUSReg(BaseSampler):
 	def __init__(self, dataobject, n_neighbors, blob_threshold, spread_threshold):
 		super().__init__(dataobject)
 		self.n_neighbors = n_neighbors
@@ -202,54 +202,54 @@ class SUS(BaseSampler):
 
 ##########################################################################################
 
-class SUSiter(SUSReg):
+# class SUSiter(SUSReg):
 
-	def __init__(self, dataobject, n_neighbors, blob_threshold, spread_threshold):
-		super().__init__(dataobject, n_neighbors, blob_threshold, spread_threshold)
+# 	def __init__(self, dataobject, n_neighbors, blob_threshold, spread_threshold):
+# 		super().__init__(dataobject, n_neighbors, blob_threshold, spread_threshold)
 
-	def iter_sample(self):
+# 	def iter_sample(self):
 		
-		undersampled_indexes = []
+# 		undersampled_indexes = []
 
-		for i in range(len(self.y_major)): # total array size to be undersampled
+# 		for i in range(len(self.y_major)): # total array size to be undersampled
 
-			if self.grade_array[i]==2:
-				undersampled_indexes.append(i)
+# 			if self.grade_array[i]==2:
+# 				undersampled_indexes.append(i)
 
-			elif self.grade_array[i]==1:
-				distances, neighbour_indexes = self.knn.kneighbors([self.X_major[i]], return_distance=True)
-				neighbour_indexes = neighbour_indexes[0] # removing itself with [1:]
-				distances = distances[0]
-				close_neighbour_boolean  = np.where(distances<self.blob, True, False) # whether neighbours are close or not
-				close_neighbour_indexes = [neighbour_indexes  for neighbour_indexes, close_neighbour_boolean in zip(neighbour_indexes, close_neighbour_boolean) if close_neighbour_boolean]
+# 			elif self.grade_array[i]==1:
+# 				distances, neighbour_indexes = self.knn.kneighbors([self.X_major[i]], return_distance=True)
+# 				neighbour_indexes = neighbour_indexes[0] # removing itself with [1:]
+# 				distances = distances[0]
+# 				close_neighbour_boolean  = np.where(distances<self.blob, True, False) # whether neighbours are close or not
+# 				close_neighbour_indexes = [neighbour_indexes  for neighbour_indexes, close_neighbour_boolean in zip(neighbour_indexes, close_neighbour_boolean) if close_neighbour_boolean]
 				
-				undersampled_indexes.append(random.choice(close_neighbour_indexes))
+# 				undersampled_indexes.append(random.choice(close_neighbour_indexes))
 
-		X_sus = np.concatenate((self.X_minor, self.X_major[undersampled_indexes]), axis=0)
-		y_sus = np.concatenate((self.y_minor, self.y_major[undersampled_indexes]), axis=0)
+# 		X_sus = np.concatenate((self.X_minor, self.X_major[undersampled_indexes]), axis=0)
+# 		y_sus = np.concatenate((self.y_minor, self.y_major[undersampled_indexes]), axis=0)
 
-		return X_sus, y_sus	
-
-
-##########################################################################################
-
-class SamplingFactory:
-	def __init__(self, dataobject, ratio, n_neighbours, sample_method, blob_threshold, spread_threshold):
-		self.method = sample_method
-		self.data = dataobject
-		self.ratio = ratio
-		self.n_neighbors = n_neighbours
-		self.blob_tr = blob_threshold
-		self.spread_tr = spread_threshold
+# 		return X_sus, y_sus	
 
 
-	def getSampler(self):
-		if self.method == 'original':
-			return BaseSampler(self.data)
-		elif self.method == 'RU':
-			return RU(self.data, self.ratio)
-		elif self.method == 'SMOGN':
-			return SMOGN(self.data)
-		elif self.method == 'SUS':
-			return SUS(self.data, self.n_neighbors, self.blob_tr, self.spread_tr)
+# ##########################################################################################
+
+# class SamplingFactory:
+# 	def __init__(self, dataobject, ratio, n_neighbours, sample_method, blob_threshold, spread_threshold):
+# 		self.method = sample_method
+# 		self.data = dataobject
+# 		self.ratio = ratio
+# 		self.n_neighbors = n_neighbours
+# 		self.blob_tr = blob_threshold
+# 		self.spread_tr = spread_threshold
+
+
+# 	def getSampler(self):
+# 		if self.method == 'original':
+# 			return BaseSampler(self.data)
+# 		elif self.method == 'RU':
+# 			return RU(self.data, self.ratio)
+# 		elif self.method == 'SMOGN':
+# 			return SMOGN(self.data)
+# 		elif self.method == 'SUS':
+# 			return SUS(self.data, self.n_neighbors, self.blob_tr, self.spread_tr)
 

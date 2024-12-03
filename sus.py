@@ -2,10 +2,11 @@ import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import check_X_y
+from phi import *
 
 class SUS:
     """
-    Selective Under-Sampling (SUS) for imbalanced regression.
+    Selective Under-Sampling (SUS) for imbalanced regression using phi control points.
     
     Parameters
     ----------
@@ -16,7 +17,7 @@ class SUS:
     spreadtr : float, default=0.5
         Threshold for cluster target values dispersion
     relevance_threshold : float, default=0.8
-        Threshold for separating rare from normal samples
+        Threshold for phi values to separate rare from normal samples
     random_state : int or None, default=None
         Random state for reproducibility
     """
@@ -30,25 +31,14 @@ class SUS:
         np.random.seed(random_state)
         
     def _compute_relevance(self, y):
-        """Compute relevance scores for target values using box plot statistics."""
-        Q1 = np.percentile(y, 25)
-        Q3 = np.percentile(y, 75)
-        IQR = Q3 - Q1
-        
-        median = np.median(y)
-        distances = np.abs(y - median)
-        max_dist = np.max(distances)
-        
-        relevance = distances / (max_dist + 1e-10)
-        
-        # Enhance relevance for outliers based on IQR
-        outlier_mask = (y < (Q1 - 1.5 * IQR)) | (y > (Q3 + 1.5 * IQR))
-        relevance[outlier_mask] = 1.0
-        
-        return relevance
+        """Compute relevance scores using phi control points."""
+        # Use phi control points for relevance computation
+        phi_params = phi_ctrl_pts(y=y)
+        y_phi = phi(y=y, ctrl_pts=phi_params)
+        return np.asarray(y_phi)
         
     def _split_rare_normal(self, X, y):
-        """Split data into rare and normal samples based on relevance."""
+        """Split data into rare and normal samples based on phi values."""
         relevance = self._compute_relevance(y)
         rare_mask = relevance >= self.relevance_threshold
         
@@ -105,11 +95,14 @@ class SUS:
         """
         X, y = check_X_y(X, y, accept_sparse=['csr', 'csc'])
         
-        # Split into rare and normal samples
+        # Split into rare and normal samples using phi values
         (X_rare, y_rare), (X_normal, y_normal) = self._split_rare_normal(X, y)
         
         if len(X_normal) == 0:
             return X, y
+            
+        # Store relevance values for reference
+        self.phi_values_ = self._compute_relevance(y)
             
         # Fit kNN on normal samples
         self.knn_ = NearestNeighbors(n_neighbors=self.k)
@@ -154,6 +147,9 @@ class SUS:
         self.y_normal_ = y_normal
         self.X_rare_ = X_rare
         self.y_rare_ = y_rare
+        
+        # Store phi values with corresponding y values
+        self.phi_zip = list(zip(self.phi_values_, y))
         
         # Combine selected normal samples with rare samples
         X_resampled = np.vstack([X_rare, X_normal[selected_indices]])
