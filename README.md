@@ -71,9 +71,11 @@ for epoch in range(num_epochs):
 ## Benchmarking
 
 The method has been evaluated on:
-- 15 standard regression datasets
-- 5 synthetic high-dimensional datasets
-- 2 age estimation image datasets (IMDB-WIKI and AgeDB)
+- 15 standard regression datasets (included in Data folder)
+- 5 synthetic high-dimensional datasets (included in Data folder)
+- 2 age estimation image datasets:
+	- IMDB-WIKI https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/
+	- AgeDB https://paperswithcode.com/dataset/agedb
 
 Results show that SUS and SUSiter typically outperform other state-of-the-art techniques like SMOGN and random under-sampling when used with neural networks.
 
