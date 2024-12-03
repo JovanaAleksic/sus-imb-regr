@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Basic Usage with SUS
+### Reading in the data
 
 ```python
 import pandas as pd
@@ -34,6 +34,7 @@ df = pd.read_csv('dataset.csv')
 X = df.drop('target_column', axis=1).values  # Features (must be numeric, encode otherwise)
 y = df['target_column'].values               # Target values
 ```
+### Basic Usage with SUS
 
 ```python
 from sus import SUS
