@@ -1,6 +1,6 @@
 # SUS: Selective Under-Sampling for Imbalanced Regression
 
-This repository contains the official implementation of the Selective Under-Sampling (SUS) method and its iterative variant SUSiter, as described in our JAIR paper: ["A Selective Under-Sampling (SUS) method for imbalanced regression"]().
+This repository contains the official implementation of the Selective Under-Sampling (SUS) method and its iterative variant SUSiter, as described in our JAIR paper: ["A Selective Under-Sampling (SUS) method for imbalanced regression"](https://jair.org/index.php/jair/article/view/16062).
 
 ## Overview
 
@@ -84,7 +84,7 @@ Results show that SUS and SUSiter typically outperform other state-of-the-art te
 If you use this code in your research, please cite our paper:
 
 ```bibtex
-@article{aleksic2024selective,
+@article{aleksic2025sus,
   title={A Selective Under-Sampling (SUS) method for imbalanced regression},
   author={Aleksic, Jovana and García-Remesal, Miguel},
   journal={Journal of Artificial Intelligence Research},
